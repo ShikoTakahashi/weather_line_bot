@@ -32,6 +32,7 @@ class LinebotController < ApplicationController
     head :ok
   end
   
+  #textで書き込まれた場合の処理
   def text_reply_message(event, user_name)
     if event_user = User.find_by(name: user_name)
       case event['message']['text']
@@ -43,7 +44,9 @@ class LinebotController < ApplicationController
                    text: "【#{DATE.month}月#{DATE.day}日】のお天気(City: #{city_name})\n#{ weather_hour}"
         }
       when "今日の天気は？"
-        message = get_locate_weather(event_user)
+        message = get_weather(event_user)
+      when "明日の天気は？"
+        message = get_tommorow_weather(event_user)
       end
     else
       message = {
@@ -53,6 +56,7 @@ class LinebotController < ApplicationController
     end
   end
   
+  #位置情報が送れてた場合の処理
   def location_relpy_message(event, user_name)
     lat = event['message']['latitude'].to_s
     lon = event['message']['longitude'].to_s
@@ -72,20 +76,30 @@ class LinebotController < ApplicationController
     end
   end
   
-  def get_locate_weather(user)
+  def get_weather(user)
     weather_hours = Open_Weather.get_today_weather(user)
     city_name = Open_Weather.get_weather_city(user)
-    weather_daily = Dark_Sky.get_dark_weather(user)
+    weather_daily = Dark_Sky.get_dark_weather(user, "today")
     message = {
                type: 'text',
-               text: "【#{DATE.month}月#{DATE.day}日】のお天気(City: #{city_name})\n#{weather_daily}\n時系列予報はこちら！\n" + weather_hours
+               text: "今日(#{DATE.month}月#{DATE.day}日)のお天気\n(City: #{city_name})\n#{weather_daily}\n時系列予報はこちら！\n" + weather_hours
     }
   end
   
+  def get_tommorow_weather(user)
+    city_name = Open_Weather.get_weather_city(user)
+    weather_daily = Dark_Sky.get_dark_weather(user, "tommorow")
+    message = {
+               type: 'text',
+               text: "明日(#{DATE.month}月#{DATE.day + 1}日)のお天気\n(City: #{city_name})\n#{weather_daily}"
+    }
+  end
+  
+  #毎朝7:00に通知するための、push処理（heroku でスケジュール処理設定）
   def push_message
     all_users = User.all
     all_users.each do |user|
-      client.push_message(user.user_name, get_locate_weather(user))
+      client.push_message(user.name, get_weather(user))
     end
   end
   
