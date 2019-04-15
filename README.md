@@ -1,24 +1,11 @@
-# README
+# アプリケーション概要
+位置情報からLINEで天気予報を通知サービス
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# 機能一覧
+①LINE返答機能・自動通知機能（7:00に今日の天気を通知する）
+②WEB APIから天気予報の取得
+③ユーザー情報保存機能（LINEユーザーID,　位置情報）
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# アプリケーション内で使用している技術一覧
+Ruby on Rails, WEB API(LINE Developers, OpenWeatherMap, DarkSky),
+heroku(Heroku Postgres, Heroku Scheduler)
