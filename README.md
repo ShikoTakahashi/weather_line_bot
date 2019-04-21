@@ -8,4 +8,4 @@
 
 # アプリケーション内で使用している技術一覧
 Ruby on Rails, WEB API(LINE Developers, OpenWeatherMap, DarkSky),
-heroku(Heroku Postgres, Heroku Scheduler)
+heroku(Heroku Postgres, Heroku Scheduler), AWS(Cloud9)
