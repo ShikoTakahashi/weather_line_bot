@@ -1,3 +1,4 @@
+![demo](docs/images/demo/line_weather_demo.gif)
 # アプリケーション概要
 位置情報からLINEで天気予報を通知サービス
 
